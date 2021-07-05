@@ -4,7 +4,7 @@ import './index.scss';
 
 function Image({ url }) {
   return (
-    <img className="image" src={url} alt="yt-img" />
+    <img className="image" src={url} alt="youtube-video-thumbnail" />
   );
 }
 

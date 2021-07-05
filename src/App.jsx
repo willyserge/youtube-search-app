@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Pane, SearchInput, Text, Heading, Alert,
+  Pane, SearchInput, Text, Heading, Alert, InlineAlert,
 } from 'evergreen-ui';
 import ModalVideo from 'react-modal-video';
 import Skeleton from 'react-loading-skeleton';
@@ -55,7 +55,7 @@ function App() {
         />
       </Pane>
       <Pane>
-        <Heading as="h3" marginY={5}>Youtube search</Heading>
+        <Heading size={700} marginY={5}>Youtube search</Heading>
         <form onSubmit={handleSubmit}>
           <SearchInput
             width="100%"
@@ -65,6 +65,11 @@ function App() {
             onChange={handleChange}
           />
         </form>
+        {!videos && (
+          <InlineAlert marginY={5} intent="none" marginBottom={16}>
+            Type and press enter to search
+          </InlineAlert>
+        )}
         {error && (
           <Alert
             marginY={5}
