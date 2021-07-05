@@ -5,7 +5,7 @@ import {
 import ModalVideo from 'react-modal-video';
 import Skeleton from 'react-loading-skeleton';
 
-import axiosInstance from './utils/axios';
+import youtubeInstance from './utils/axios';
 import Image from './Components/Image';
 
 import './app.scss';
@@ -26,7 +26,7 @@ function App() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axiosInstance.get(`/search?q=${searchValue}`);
+      const res = await youtubeInstance.get(`/search?q=${searchValue}`);
       setVideos(res.data.items);
       setLoading(false);
     } catch (err) {
@@ -115,6 +115,24 @@ function App() {
           }
         </Pane>
       </Pane>
+      {
+        !videos && (
+          <Pane
+            height={400}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            border="default"
+            flexDirection="column"
+          >
+            <img
+              src="https://res.cloudinary.com/dorlzbjs4/image/upload/v1625515643/317714_video_youtube_icon_3_b4seai.png"
+              alt="youtube-logo"
+            />
+            <Heading as="h3">Youtube search</Heading>
+          </Pane>
+        )
+      }
     </Pane>
   );
 }
