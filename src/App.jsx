@@ -42,33 +42,27 @@ function App() {
         </form>
       </Pane>
       <Pane>
-        <Pane clearfix>
+        <Pane
+          display="grid"
+          gridTemplateColumns="repeat(auto-fill, minmax(200px,1fr))"
+          gap={20}
+          justifyContent="center"
+          paddingY={20}
+        >
           {data && (
             data.map((item) => (
               <Pane
                 key={item.id.videoId}
                 elevation={1}
                 backgroundColor="white"
-                float="left"
-                margin={24}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="column"
+                cursor="pointer"
               >
-                <Pane
-                  width={320}
-                  height={180}
-                >
+                <Pane>
                   <Image url={item.snippet.thumbnails.medium.url} />
                 </Pane>
-                <Pane
-                  width={320}
-                  padding={10}
-                >
+                <Pane padding={5}>
                   <Text>{item.snippet.title}</Text>
                 </Pane>
-
               </Pane>
             ))
           )}

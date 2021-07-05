@@ -4,7 +4,7 @@ import './index.scss';
 
 function Image({ url }) {
   return (
-    <img className="image" src={url} />
+    <img className="image" src={url} alt="yt-img" />
   );
 }
 

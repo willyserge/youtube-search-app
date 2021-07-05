@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
   baseURL,
   params: {
     part: 'snippet',
-    maxResults: 5,
+    maxResults: 10,
     key,
   },
 });
