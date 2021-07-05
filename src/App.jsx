@@ -1,21 +1,22 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { Pane, SearchInput, Text } from 'evergreen-ui';
+import {
+  Pane, SearchInput, Text, Heading, Alert,
+} from 'evergreen-ui';
+import ModalVideo from 'react-modal-video';
+import Skeleton from 'react-loading-skeleton';
 
 import axiosInstance from './utils/axios';
-import fetchVideos from './utils/api';
 import Image from './Components/Image';
+
+import './app.scss';
 
 function App() {
   const [searchValue, setSearchValue] = useState('');
-  const [videos, setVideos] = useState([]);
-
-  const { data, refetch } = useQuery(['phases', searchValue], fetchVideos, {
-    retry: false,
-    enabled: false,
-  });
+  const [videos, setVideos] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isModalShown, setIsModalShown] = useState(false);
 
   const handleChange = (e) => {
     setSearchValue(e.target.value);
@@ -23,14 +24,35 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    refetch();
+    try {
+      setLoading(true);
+      const res = await axiosInstance.get(`/search?q=${searchValue}`);
+      setVideos(res.data.items);
+      setLoading(false);
+    } catch (err) {
+      setError(err.response.data.error.message);
+      setLoading(false);
+    }
   };
 
-  console.log(data);
+  const handleThumbnailClick = (selectedVideoId) => {
+    setIsModalShown(true);
+    setSelectedVideo(selectedVideoId);
+  };
 
   return (
-    <Pane padding={30}>
+    <Pane padding={30} marginX={60}>
       <Pane>
+        <ModalVideo
+          channel="youtube"
+          autoplay
+          isOpen={isModalShown}
+          videoId={selectedVideo}
+          onClose={() => setIsModalShown(false)}
+        />
+      </Pane>
+      <Pane>
+        <Heading as="h3" marginY={5}>Youtube search</Heading>
         <form onSubmit={handleSubmit}>
           <SearchInput
             width="100%"
@@ -40,6 +62,13 @@ function App() {
             onChange={handleChange}
           />
         </form>
+        {error && (
+          <Alert
+            marginY={5}
+            intent="danger"
+            title={error}
+          />
+        )}
       </Pane>
       <Pane>
         <Pane
@@ -49,13 +78,14 @@ function App() {
           justifyContent="center"
           paddingY={20}
         >
-          {data && (
-            data.map((item) => (
+          {videos && (
+            videos.map((item) => (
               <Pane
                 key={item.id.videoId}
                 elevation={1}
                 backgroundColor="white"
                 cursor="pointer"
+                onClick={handleThumbnailClick}
               >
                 <Pane>
                   <Image url={item.snippet.thumbnails.medium.url} />
@@ -66,6 +96,23 @@ function App() {
               </Pane>
             ))
           )}
+
+          {
+            loading && (
+              <>
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+                <Skeleton width="100%" height="180px" />
+              </>
+            )
+          }
         </Pane>
       </Pane>
     </Pane>
