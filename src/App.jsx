@@ -4,6 +4,7 @@ import {
 } from 'evergreen-ui';
 import ModalVideo from 'react-modal-video';
 import Skeleton from 'react-loading-skeleton';
+import { useMediaQuery } from 'react-responsive';
 
 import youtubeInstance from './utils/axios';
 import Image from './Components/Image';
@@ -17,6 +18,8 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isModalShown, setIsModalShown] = useState(false);
+
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const handleChange = (e) => {
     setSearchValue(e.target.value);
@@ -41,7 +44,7 @@ function App() {
   };
 
   return (
-    <Pane padding={30} marginX={60}>
+    <Pane padding={30} marginX={isTabletOrMobile ? 5 : 60}>
       <Pane>
         <ModalVideo
           channel="youtube"
