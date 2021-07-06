@@ -93,7 +93,7 @@ function App() {
                 elevation={1}
                 backgroundColor="white"
                 cursor="pointer"
-                onClick={handleThumbnailClick}
+                onClick={() => handleThumbnailClick(item.id.videoId)}
               >
                 <Pane>
                   <Image url={item.snippet.thumbnails.medium.url} />
